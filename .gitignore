@@ -2,3 +2,6 @@ scripts*
 log*
 config*
 panel/package-lock.json
+panel/node_modules*
+docker/src.tgz
+docker-compose.yml
