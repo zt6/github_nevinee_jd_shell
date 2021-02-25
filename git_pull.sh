@@ -97,7 +97,7 @@ function Change_ALL {
     . ${FileConf}
     if [ -n "${Cookie1}" ]; then
       Count_UserSum
-      Change_JoyRunPins
+      # Change_JoyRunPins
     fi
   fi
 }
