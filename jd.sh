@@ -155,7 +155,8 @@ function Run_Pm2 {
   pm2 flush
   for js in ${HangUpJs}
   do
-    pm2 restart ${js}.js || pm2 start ${js}.js
+    pm2 stop ${js}.js 2>/dev/null
+    pm2 start ${js}.js
   done
 }
 
