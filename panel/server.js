@@ -12,7 +12,7 @@ var bodyParser = require('body-parser');
 var got = require('got');
 var path = require('path');
 var fs = require('fs');
-var { execSync } = require('child_process');
+var { execSync, exec } = require('child_process');
 
 var rootPath = path.resolve(__dirname, '..')
 // config.sh 文件所在目录
@@ -312,7 +312,7 @@ app.get('/changepwd', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/pwd.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 });
 
@@ -408,7 +408,7 @@ app.get('/home', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/home.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 
 });
@@ -420,7 +420,7 @@ app.get('/diff', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/diff.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 
 });
@@ -432,7 +432,7 @@ app.get('/shareCode', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/shareCode.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 
 });
@@ -444,7 +444,7 @@ app.get('/crontab', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/crontab.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 
 });
@@ -456,10 +456,61 @@ app.get('/diy', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/diy.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 
 });
+
+/**
+ * 手动执行脚本 页面
+ */
+app.get('/run', function (request, response) {
+    if (request.session.loggedin) {
+        response.sendFile(path.join(__dirname + '/public/run.html'));
+    } else {
+        response.redirect('/');
+    }
+});
+
+app.post('/runCmd', function(request, response) {
+    if (request.session.loggedin) {
+        const cmd = request.body.cmd;
+        const delay = request.body.delay || 0;
+        exec(cmd, (error, stdout, stderr) => {
+            // 根据传入延时返回数据，有时太快会出问题
+            setTimeout(() => {
+                if (error) {
+                    console.error(`执行的错误: ${error}`);
+                    response.send({ err: 1, msg: '执行出错！' });
+                    return;
+                }
+                console.log(`stdout: ${stdout}`);
+                response.send({ err: 0, msg: `${stdout}` });
+                console.error(`stderr: ${stderr}`);
+            }, delay);
+        });
+    } else {
+        response.redirect('/');
+    }
+});
+
+/**
+ * 使用jsName获取最新的日志
+ */
+app.get('/runLog/:jsName', function (request, response) {
+    if (request.session.loggedin) {
+        let shareCodeFile = getLastModifyFilePath(path.join(rootPath, `log/${request.params.jsName}/`));
+        if (shareCodeFile) {
+            content = getFileContentByName(shareCodeFile);
+            response.setHeader("Content-Type", "text/plain");
+            response.send(content);
+        } else {
+            response.send("no logs");
+        }
+    } else {
+        response.send(loginFaild);
+    }
+})
 
 
 /**
@@ -481,7 +532,6 @@ app.post('/auth', function (request, response) {
             }
         } else {
             response.send({ err: 1, msg: "请输入用户名密码!" });
-
         }
     });
 
@@ -498,13 +548,17 @@ app.post('/changepass', function (request, response) {
             user: username,
             password: password
         }
-        fs.writeFile(authConfigFile, JSON.stringify(config), function (err) {
-            if (err) {
-                response.send({ err: 1, msg: "写入错误请重试!" });
-            } else {
-                response.send({ err: 0, msg: "更新成功!" });
-            }
-        })
+        if (username && password) {
+            fs.writeFile(authConfigFile, JSON.stringify(config), function (err) {
+                if (err) {
+                    response.send({ err: 1, msg: "写入错误请重试!" });
+                } else {
+                    response.send({ err: 0, msg: "更新成功!" });
+                }
+            });
+        } else {
+            response.send({ err: 1, msg: "请输入用户名密码!" });
+        }
 
     } else {
         response.send(loginFaild);
@@ -517,7 +571,7 @@ app.post('/changepass', function (request, response) {
  */
 app.get('/logout', function (request, response) {
     request.session.destroy()
-    response.redirect('./');
+    response.redirect('/');
 
 });
 
@@ -544,7 +598,7 @@ app.get('/log', function (request, response) {
     if (request.session.loggedin) {
         response.sendFile(path.join(__dirname + '/public/tasklog.html'));
     } else {
-        response.redirect('./');
+        response.redirect('/');
     }
 });
 
