@@ -57,6 +57,8 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         $(document).ready(function () {
             var timer=0;
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -81,8 +83,7 @@
 
                 const jsName = this.id === 'jd_list' ? '' : this.id;
                 const cmd = jsName ? `bash jd ${jsName} now`: 'bash jd';
-                const timeStamp = (new Date()).getTime();
-                $.post('./runCmd?t='+timeStamp, {cmd: cmd}, function (data) {
+                $.post('./runCmd', {cmd: cmd}, function (data) {
                     editor.setValue(data.msg);
 
                     if (jsName) {
@@ -117,8 +118,7 @@
                 editor.setValue('');
 
                 const cmd = `bash jd ${this.id}`;
-                const timeStamp = (new Date()).getTime();
-                $.post('./runCmd?t='+timeStamp, {cmd: cmd}, function (data) {
+                $.post('./runCmd', {cmd: cmd}, function (data) {
                     editor.setValue(data.msg);
 
                     clearInterval(timer);
@@ -149,8 +149,7 @@
                 editor.setValue('');
 
                 const cmd = `bash jd ${jdScript} now`;
-                const timeStamp = (new Date()).getTime();
-                $.post('./runCmd?t='+timeStamp, {cmd: cmd, delay: 1000}, function (data) {
+                $.post('./runCmd', {cmd: cmd, delay: 1000}, function (data) {
                     editor.setValue(data.msg);
 
                     //将光标和滚动条设置到文本区最下方
@@ -181,8 +180,7 @@
             }
 
             function getLog(jsName) {
-                const timeStamp = (new Date()).getTime();
-                $.get(`./runLog/${jsName}?t=${timeStamp}`, function (data) {
+                $.get(`./runLog/${jsName}`, function (data) {
                     if (data !== 'no logs') {
                         editor.setValue(data);
                     }

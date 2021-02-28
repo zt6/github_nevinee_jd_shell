@@ -55,6 +55,8 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         var comp = $('#compare');
 
         function downloadFile(url, callback) {
@@ -62,7 +64,6 @@
                 callback(data);
             });
         }
-        let timeStamp = (new Date()).getTime()
         comp.mergely({
             cmsettings: {
                 readOnly: false,
@@ -79,10 +80,10 @@
             editor_height: '100%',
 
             lhs: function (setValue) {
-                downloadFile('./api/config/config?t='+timeStamp, setValue);
+                downloadFile('./api/config/config', setValue);
             },
             rhs: function (setValue) {
-                downloadFile('./api/config/sample?t='+timeStamp, setValue);
+                downloadFile('./api/config/sample', setValue);
             }
         });
 
@@ -106,8 +107,7 @@
         });
         $('#save').click(function () {
             var confContent = comp.mergely('get', 'lhs');
-            let timeStamp = (new Date()).getTime()
-            $.post('./api/save?t='+timeStamp, { content: confContent, name: "config.sh" }, function (data) {
+            $.post('./api/save', { content: confContent, name: "config.sh" }, function (data) {
                 let icon = (data.err == 0) ? "success" : "error"
                     Swal.fire({
                         title:data.title,

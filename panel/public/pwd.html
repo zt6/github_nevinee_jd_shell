@@ -37,13 +37,14 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         $("#changeBtn").click(function () {
             $user = $(".username").val();
             $password = $(".password").val();
             if (!$user || !$password) return;
 
-            let timeStamp = (new Date()).getTime()
-            $.post('./changepass?t=' + timeStamp, { username: $user, password: $password }, function (data) {
+            $.post('./changepass', { username: $user, password: $password }, function (data) {
                 let icon = (data.err == 0) ? "success" : "error"
                 Swal.fire({
                     text: data.msg,

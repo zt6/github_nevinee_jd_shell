@@ -70,6 +70,8 @@
     <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
     <script src="./js/codemirror.min.js"></script>
     <script>
+        $.ajaxSetup({ cache: false });
+
         var qrcode, userCookie;
         $(document).ready(function () {
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -82,7 +84,7 @@
                 theme: 'dracula'
             });
             
-            $.get("./api/logs", function (data) {
+            $.get('./api/logs', function (data) {
                 var dirs = data.dirs;
                 var navHtml = "";
                 for (let index in dirs) {
@@ -109,7 +111,7 @@
                     dispatch(document.getElementById('toggleIcon'), 'click');
                 }
 
-                $.get("./api/logs/" + dir + "/" + file, function (data) {
+                $.get(`./api/logs/${dir}/${file}`, function (data) {
                     editor.setValue(data);
                 });
             }
