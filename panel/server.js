@@ -609,6 +609,7 @@ app.get('/api/logs', function (request, response) {
     if (request.session.loggedin) {
         var fileList = fs.readdirSync(logPath, 'utf-8');
         var dirs = [];
+        var rootFiles = [];
         for (var i = 0; i < fileList.length; i++) {
             var stat = fs.lstatSync(logPath + fileList[i]);
             // 是目录，需要继续
@@ -616,15 +617,20 @@ app.get('/api/logs', function (request, response) {
                 var fileListTmp = fs.readdirSync(logPath + '/' + fileList[i], 'utf-8');
                 fileListTmp.reverse();
                 var dirMap = {
-                    "dirName": fileList[i],
-                    "files": fileListTmp
+                    dirName: fileList[i],
+                    files: fileListTmp
                 }
                 dirs.push(dirMap);
+            } else {
+                rootFiles.push(fileList[i]);
             }
         }
-        var result = {
-            "dirs": dirs,
-        };
+
+        dirs.push({
+            dirName: '@',
+            files: rootFiles
+        });
+        var result = { dirs };
         response.send(result);
 
     } else {
@@ -638,7 +644,12 @@ app.get('/api/logs', function (request, response) {
  */
 app.get('/api/logs/:dir/:file', function (request, response) {
     if (request.session.loggedin) {
-        var filePath = logPath + request.params.dir + '/' + request.params.file;
+        let filePath;
+        if (request.params.dir === '@') {
+            filePath = logPath + request.params.file;
+        } else {
+            filePath = logPath + request.params.dir + '/' + request.params.file;
+        }
         var content = getFileContentByName(filePath);
         response.setHeader("Content-Type", "text/plain");
         response.send(content);

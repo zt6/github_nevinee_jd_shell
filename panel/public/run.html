@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>手动执行脚本</title>
+    <title>手动执行京东脚本</title>
     <script type="text/javascript" src="./js/jquery.min.js"></script>
     <script type="text/javascript" src="./js/codemirror.min.js"></script>
     <script type="text/javascript" src="./js/shell.js"></script>
@@ -40,6 +40,7 @@
                 <button id="jd_fruit" class="cmd-btn" title="东东农场">东东农场</button>
                 <button id="jd_dreamFactory" class="cmd-btn" title="京喜工厂">京喜工厂</button>
                 <button id="jd_joy_reward" class="cmd-btn" title="宠汪汪积分兑换">宠汪汪积分兑换</button>
+                <button id="git_pull" title="更新脚本">更新脚本</button>
                 <button id="hangup" title="重启挂机程序">重启挂机程序</button>
                 <button id="resetpwd" title="重置用户名密码">重置用户名密码</button>
                 <br/>
@@ -57,6 +58,8 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         $(document).ready(function () {
             var timer=0;
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -81,8 +84,7 @@
 
                 const jsName = this.id === 'jd_list' ? '' : this.id;
                 const cmd = jsName ? `bash jd ${jsName} now`: 'bash jd';
-                const timeStamp = (new Date()).getTime();
-                $.post('./runCmd?t='+timeStamp, {cmd: cmd}, function (data) {
+                $.post('./runCmd', {cmd: cmd}, function (data) {
                     editor.setValue(data.msg);
 
                     if (jsName) {
@@ -101,8 +103,22 @@
                 }, 1000);
             });
 
-            $('#hangup, #resetpwd').click(function() {
-                const confirmTxt = this.id === 'hangup' ? '确认重启挂机程序？' : '重置用户名密码？'
+            $('#hangup, #resetpwd, #git_pull').click(function() {
+                let confirmTxt;
+                switch (this.id) {
+                    case 'git_pull':
+                        confirmTxt = '确认更新脚本文件？';
+                        break;
+                    case 'hangup':
+                        confirmTxt = '确认重启挂机程序？';
+                        break;
+                    case 'resetpwd':
+                        confirmTxt = '重置用户名密码？';
+                        break;
+                    default:
+                        break;
+                }
+
                 if (!confirm(confirmTxt)) {
                     return;
                 }
@@ -116,9 +132,8 @@
                 }
                 editor.setValue('');
 
-                const cmd = `bash jd ${this.id}`;
-                const timeStamp = (new Date()).getTime();
-                $.post('./runCmd?t='+timeStamp, {cmd: cmd}, function (data) {
+                const cmd = this.id === 'git_pull' ? 'bash git_pull' : `bash jd ${this.id}`;
+                $.post('./runCmd', {cmd: cmd}, function (data) {
                     editor.setValue(data.msg);
 
                     clearInterval(timer);
@@ -149,8 +164,7 @@
                 editor.setValue('');
 
                 const cmd = `bash jd ${jdScript} now`;
-                const timeStamp = (new Date()).getTime();
-                $.post('./runCmd?t='+timeStamp, {cmd: cmd, delay: 1000}, function (data) {
+                $.post('./runCmd', {cmd: cmd, delay: 1000}, function (data) {
                     editor.setValue(data.msg);
 
                     //将光标和滚动条设置到文本区最下方
@@ -181,8 +195,7 @@
             }
 
             function getLog(jsName) {
-                const timeStamp = (new Date()).getTime();
-                $.get(`./runLog/${jsName}?t=${timeStamp}`, function (data) {
+                $.get(`./runLog/${jsName}`, function (data) {
                     if (data !== 'no logs') {
                         editor.setValue(data);
                     }

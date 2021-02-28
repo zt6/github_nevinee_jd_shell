@@ -44,6 +44,8 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         $(document).ready(function () {
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
@@ -54,15 +56,13 @@
                 theme: 'dracula',
                 keyMap: 'sublime'
             });
-            let timeStamp = Date.now();
-            $.get("./api/config/crontab?t="+timeStamp, function (data) {
+            $.get('./api/config/crontab', function (data) {
                 editor.setValue(data);
             });
 
             $('#save').click(function () {
                 var confContent = editor.getValue();
-                let timeStamp = Date.now();
-                $.post('./api/save?t='+timeStamp, { content: confContent, name: "crontab.list" }, function (data) {
+                $.post('./api/save', { content: confContent, name: "crontab.list" }, function (data) {
                     let icon = (data.err == 0) ? "success" : "error"
                     Swal.fire({
                         title:data.title,

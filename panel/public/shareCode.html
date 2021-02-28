@@ -45,6 +45,8 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         $(document).ready(function () {
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
@@ -55,8 +57,7 @@
                 mode: 'text',
                 theme: 'dracula'
             });
-            let timeStamp = (new Date()).getTime()
-            $.get("./api/config/shareCode?t="+timeStamp, function (data) {
+            $.get('./api/config/shareCode', function (data) {
                 editor.setValue(data);
             });
         });

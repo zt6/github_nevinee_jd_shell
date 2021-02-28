@@ -60,6 +60,8 @@
         </div>
     </div>
     <script>
+        $.ajaxSetup({ cache: false });
+
         var qrcode, userCookie;
         $(document).ready(function () {
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -71,8 +73,7 @@
                 theme: 'dracula',
                 keyMap: 'sublime'
             });
-            let timeStamp = (new Date()).getTime()
-            $.get("./api/config/config?t="+timeStamp, function (data) {
+            $.get('./api/config/config', function (data) {
                 editor.setValue(data);
             });
 
@@ -95,8 +96,7 @@
 
             function checkLogin() {
                 var timeId = setInterval(() => {
-                    let timeStamp = (new Date()).getTime()
-                    $.get('./cookie?t='+timeStamp, function (data) {
+                    $.get('./cookie', function (data) {
                         if (data.err == 0) {
                             clearInterval(timeId);
                             $("#qrcontainer").addClass("hidden");
@@ -122,8 +122,7 @@
             }
 
             function get_code() {
-                let timeStamp = (new Date()).getTime()
-                $.get('./qrcode?t='+timeStamp, function (data) {
+                $.get('./qrcode', function (data) {
                     if (data.err == 0) {
                         $("#qrcontainer").removeClass("hidden")
                         $("#refresh_qrcode").addClass("hidden")
@@ -150,8 +149,7 @@
 
             $('#save').click(function () {
                 var confContent = editor.getValue();
-                let timeStamp = (new Date()).getTime()
-                $.post('./api/save?t='+timeStamp, { content: confContent, name: "config.sh" }, function (data) {
+                $.post('./api/save', { content: confContent, name: "config.sh" }, function (data) {
                     let icon = (data.err == 0) ? "success" : "error"
                     Swal.fire({
                         title:data.title,
