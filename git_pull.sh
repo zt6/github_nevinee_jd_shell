@@ -49,6 +49,7 @@ function Update_Cron {
 
 ## 更新shell
 function Git_PullShell {
+  echo -e "更新shell...\n"
   cd ${ShellDir}
   git fetch --all
   ExitStatusShell=$?
@@ -58,6 +59,7 @@ function Git_PullShell {
 
 ## 克隆scripts
 function Git_CloneScripts {
+  echo -e "克隆scripts..."
   git clone -b master ${ScriptsURL} ${ScriptsDir}
   ExitStatusScripts=$?
   echo
@@ -65,6 +67,7 @@ function Git_CloneScripts {
 
 ## 更新scripts
 function Git_PullScripts {
+  echo -e "更新scripts..."
   cd ${ScriptsDir}
   git fetch --all
   ExitStatusScripts=$?
@@ -310,7 +313,7 @@ echo -e "\nJS脚本目录：${ScriptsDir}\n"
 echo -e "--------------------------------------------------------------\n"
 
 ## 更新shell，更新crontab
-echo -e "更新shell...\n" && Git_PullShell
+Git_PullShell
 [[ ${ExitStatusShell} -eq 0 ]] && echo -e "更新shell成功...\n" || echo -e "更新shell失败，请检查原因...\n"
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
 
