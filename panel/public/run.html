@@ -40,6 +40,7 @@
                 <button id="jd_fruit" class="cmd-btn" title="东东农场">东东农场</button>
                 <button id="jd_dreamFactory" class="cmd-btn" title="京喜工厂">京喜工厂</button>
                 <button id="jd_joy_reward" class="cmd-btn" title="宠汪汪积分兑换">宠汪汪积分兑换</button>
+                <button id="git_pull" title="更新脚本">更新脚本</button>
                 <button id="hangup" title="重启挂机程序">重启挂机程序</button>
                 <button id="resetpwd" title="重置用户名密码">重置用户名密码</button>
                 <br/>
@@ -102,8 +103,22 @@
                 }, 1000);
             });
 
-            $('#hangup, #resetpwd').click(function() {
-                const confirmTxt = this.id === 'hangup' ? '确认重启挂机程序？' : '重置用户名密码？'
+            $('#hangup, #resetpwd, #git_pull').click(function() {
+                let confirmTxt;
+                switch (this.id) {
+                    case 'git_pull':
+                        confirmTxt = '确认更新脚本文件？';
+                        break;
+                    case 'hangup':
+                        confirmTxt = '确认重启挂机程序？';
+                        break;
+                    case 'resetpwd':
+                        confirmTxt = '重置用户名密码？';
+                        break;
+                    default:
+                        break;
+                }
+
                 if (!confirm(confirmTxt)) {
                     return;
                 }
@@ -117,7 +132,7 @@
                 }
                 editor.setValue('');
 
-                const cmd = `bash jd ${this.id}`;
+                const cmd = this.id === 'git_pull' ? 'bash git_pull' : `bash jd ${this.id}`;
                 $.post('./runCmd', {cmd: cmd}, function (data) {
                     editor.setValue(data.msg);
 
