@@ -1,6 +1,6 @@
-## Version: v3.25.1
-## Date: 2021-02-03
-## Update Content: 增加如何利用 TempBlockCookie 这个参数来实现控制某些账号不玩某些游戏的说明，如需使用此功能得自己参考示例进行修改。
+## Version: v3.26.0
+## Date: 2021-02-28
+## Update Content: 增加CFD
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
 ## 如需更新，请参考WIKI（https://github.com/EvineDeng/jd-base/wiki）中"如何更新配置文件"部分的操作说明，进行智能比对后修改。
@@ -365,104 +365,23 @@ ForOtherSgmh5=""
 ForOtherSgmh6=""
 
 
-################################## 定义2020年炸年兽活动互助（选填） ##################################
+################################## 定义财富岛活动互助（选填） ##################################
 ## 具体填法及要求详见本文件最下方“互助码填法示例”
-## 仅2021年2月12日前有效
-MyNian1=""
-MyNian2=""
-MyNian3=""
-MyNian4=""
-MyNian5=""
-MyNian6=""
-MyNianA=""
-MyNianB=""
+MyCfd1=""
+MyCfd2=""
+MyCfd3=""
+MyCfd4=""
+MyCfd5=""
+MyCfd6=""
+MyCfdA=""
+MyCfdB=""
 
-ForOtherNian1=""
-ForOtherNian2=""
-ForOtherNian3=""
-ForOtherNian4=""
-ForOtherNian5=""
-ForOtherNian6=""
-
-
-################################## 定义2020年炸年兽组队PK互助（选填） ##################################
-## 具体填法及要求详见本文件最下方“互助码填法示例”
-## 仅2021年2月12日前有效
-MyNianPk1=""
-MyNianPk2=""
-MyNianPk3=""
-MyNianPk4=""
-MyNianPk5=""
-MyNianPk6=""
-MyNianPkA=""
-MyNianPkB=""
-
-ForOtherNianPk1=""
-ForOtherNianPk2=""
-ForOtherNianPk3=""
-ForOtherNianPk4=""
-ForOtherNianPk5=""
-ForOtherNianPk6=""
-
-
-################################## 定义神仙书院活动互助（选填） ##################################
-## 具体填法及要求详见本文件最下方“互助码填法示例”
-## 仅2021年2月5日前有效
-MyImmortal1=""
-MyImmortal2=""
-MyImmortal3=""
-MyImmortal4=""
-MyImmortal5=""
-MyImmortal6=""
-MyImmortalA=""
-MyImmortalB=""
-
-ForOtherImmortal1=""
-ForOtherImmortal2=""
-ForOtherImmortal3=""
-ForOtherImmortal4=""
-ForOtherImmortal5=""
-ForOtherImmortal6=""
-
-
-################################## 定义京东手机年终奖活动互助（选填） ##################################
-## 具体填法及要求详见本文件最下方“互助码填法示例”
-## 仅2021年2月8日(含)前有效
-MyJdMobileFestival1=""
-MyJdMobileFestival2=""
-MyJdMobileFestival3=""
-MyJdMobileFestival4=""
-MyJdMobileFestival5=""
-MyJdMobileFestival6=""
-MyJdMobileFestivalA=""
-MyJdMobileFestivalB=""
-
-ForOtherJdMobileFestival1=""
-ForOtherJdMobileFestival2=""
-ForOtherJdMobileFestival3=""
-ForOtherJdMobileFestival4=""
-ForOtherJdMobileFestival5=""
-ForOtherJdMobileFestival6=""
-
-
-################################## 定义京东压岁钱活动互助（选填） ##################################
-## 具体填法及要求详见本文件最下方“互助码填法示例”
-## 仅2021年2月11日(含)前有效
-MyNY1=""
-MyNY2=""
-MyNY3=""
-MyNY4=""
-MyNY5=""
-MyNY6=""
-MyNYA=""
-MyNYB=""
-
-ForOtherNY1=""
-ForOtherNY2=""
-ForOtherNY3=""
-ForOtherNY4=""
-ForOtherNY5=""
-ForOtherNY6=""
+ForOtherCfd1=""
+ForOtherCfd2=""
+ForOtherCfd3=""
+ForOtherCfd4=""
+ForOtherCfd5=""
+ForOtherCfd6=""
 
 
 ################################## 定义东东超市蓝币兑换数量（选填） ##################################
