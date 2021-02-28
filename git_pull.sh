@@ -59,7 +59,7 @@ function Git_PullShell {
 
 ## 克隆scripts
 function Git_CloneScripts {
-  echo -e "克隆scripts..."
+  echo -e "克隆scripts...\n"
   git clone -b master ${ScriptsURL} ${ScriptsDir}
   ExitStatusScripts=$?
   echo
@@ -67,7 +67,7 @@ function Git_CloneScripts {
 
 ## 更新scripts
 function Git_PullScripts {
-  echo -e "更新scripts..."
+  echo -e "更新scripts...\n"
   cd ${ScriptsDir}
   git fetch --all
   ExitStatusScripts=$?
