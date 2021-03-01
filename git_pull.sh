@@ -23,6 +23,7 @@ ContentNewTask=${ShellDir}/new_task
 ContentDropTask=${ShellDir}/drop_task
 SendCount=${ShellDir}/send_count
 isTermux=${ANDROID_RUNTIME_ROOT}${ANDROID_ROOT}
+ShellURL=${JD_SHELL_URL:-git@gitee.com:evine/jd_shell.git}
 ScriptsURL=${JD_SCRIPTS_URL:-git@gitee.com:lxk0301/jd_scripts.git}
 
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
@@ -46,9 +47,19 @@ function Update_Cron {
   fi
 }
 
+## 更新shell
+function Git_PullShell {
+  echo -e "更新shell...\n"
+  cd ${ShellDir}
+  git fetch --all
+  ExitStatusShell=$?
+  git reset --hard origin/master
+  echo
+}
+
 ## 克隆scripts
 function Git_CloneScripts {
-  # echo -e "克隆LXK9301脚本，原地址：${ScriptsURL}\n"
+  echo -e "克隆scripts...\n"
   git clone -b master ${ScriptsURL} ${ScriptsDir}
   ExitStatusScripts=$?
   echo
@@ -56,7 +67,7 @@ function Git_CloneScripts {
 
 ## 更新scripts
 function Git_PullScripts {
-  # echo -e "更新LXK9301脚本，原地址：${ScriptsURL}\n"
+  echo -e "更新scripts...\n"
   cd ${ScriptsDir}
   git fetch --all
   ExitStatusScripts=$?
@@ -301,7 +312,9 @@ fi
 echo -e "\nJS脚本目录：${ScriptsDir}\n"
 echo -e "--------------------------------------------------------------\n"
 
-## 更新crontab
+## 更新shell，更新crontab
+Git_PullShell
+[[ ${ExitStatusShell} -eq 0 ]] && echo -e "更新shell成功...\n" || echo -e "更新shell失败，请检查原因...\n"
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
 
 ## 克隆或更新js脚本
@@ -311,7 +324,7 @@ echo -e "--------------------------------------------------------------\n"
 ## 执行各函数
 if [[ ${ExitStatusScripts} -eq 0 ]]
 then
-  echo -e "js脚本更新完成...\n"
+  echo -e "更新scripts成功...\n"
   Change_ALL
   [ -d ${ScriptsDir}/node_modules ] && Notify_Version
   Diff_Cron
@@ -321,7 +334,7 @@ then
   Del_Cron
   Add_Cron
 else
-  echo -e "js脚本更新失败，请检查原因或再次运行git_pull.sh...\n"
+  echo -e "更新scripts失败，请检查原因...\n"
   Change_ALL
 fi
 
