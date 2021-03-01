@@ -486,9 +486,14 @@ app.post('/runCmd', function(request, response) {
                     response.send({ err: 1, msg: '执行出错！' });
                     return;
                 }
-                console.log(`stdout: ${stdout}`);
-                response.send({ err: 0, msg: `${stdout}` });
-                console.error(`stderr: ${stderr}`);
+                if (stdout) {
+                    response.send({ err: 0, msg: `${stdout}` });
+                }
+
+                if (stderr) {
+                    console.error(`stderr: ${stderr}`);
+                    response.send({ err: 1, msg: `${stderr}` });
+                }
             }, delay);
         });
     } else {
