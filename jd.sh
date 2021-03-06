@@ -47,9 +47,7 @@ function Combin_Sub {
   CombinAll=""
   for ((i=1; i<=${UserSum}; i++)); do
     for num in ${TempBlockCookie}; do
-      if [[ $i -eq $num ]]; then
-        continue 2
-      fi
+      [[ $i -eq $num ]] && continue 2
     done
     Tmp1=$1$i
     Tmp2=${!Tmp1}
@@ -207,7 +205,7 @@ case $# in
     ;;
   1)
     if [[ $1 == hangup ]]; then
-      Run_HangUp $1
+      Run_HangUp
     elif [[ $1 == resetpwd ]]; then
       Reset_Pwd
     else
