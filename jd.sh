@@ -131,42 +131,29 @@ function Help {
 
 ## nohup
 function Run_Nohup {
-  for js in ${HangUpJs}
-  do
-    if [[ $(ps -ef | grep "${js}" | grep -v "grep") != "" ]]; then
-      ps -ef | grep "${js}" | grep -v "grep" | awk '{print $2}' | xargs kill -9
-    fi
-  done
-
-  for js in ${HangUpJs}
-  do
-    [ ! -d ${LogDir}/${js} ] && mkdir -p ${LogDir}/${js}
-    LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
-    LogFile="${LogDir}/${js}/${LogTime}.log"
-    nohup node ${js}.js > ${LogFile} &
-  done
-}
-
-## pm2
-function Run_Pm2 {
-  pm2 flush
-  for js in ${HangUpJs}
-  do
-    pm2 stop ${js}.js 2>/dev/null
-    pm2 start ${js}.js
-  done
+  if [[ $(ps -ef | grep "${js}" | grep -v "grep") != "" ]]; then
+    ps -ef | grep "${js}" | grep -v "grep" | awk '{print $2}' | xargs kill -9
+  fi
+  [ ! -d ${LogDir}/${js} ] && mkdir -p ${LogDir}/${js}
+  LogTime=$(date "+%Y-%m-%d-%H-%M-%S")
+  LogFile="${LogDir}/${js}/${LogTime}.log"
+  nohup node ${js}.js > ${LogFile} &
 }
 
 ## 运行挂机脚本
 function Run_HangUp {
-  Import_Conf $1 && Detect_Cron && Set_Env
   HangUpJs="jd_crazy_joy_coin"
   cd ${ScriptsDir}
-  if type pm2 >/dev/null 2>&1; then
-    Run_Pm2 2>/dev/null
-  else
-    Run_Nohup >/dev/null 2>&1
-  fi
+  for js in ${HangUpJs}; do
+    Import_Conf ${js} && Set_Env
+    if type pm2 >/dev/null 2>&1; then
+      pm2 flush
+      pm2 stop ${js}.js 2>/dev/null
+      pm2 start ${js}.js
+    else
+      Run_Nohup >/dev/null 2>&1
+    fi
+  done
 }
 
 ## 重置密码
@@ -220,7 +207,7 @@ case $# in
     ;;
   1)
     if [[ $1 == hangup ]]; then
-      Run_HangUp
+      Run_HangUp $1
     elif [[ $1 == resetpwd ]]; then
       Reset_Pwd
     else
