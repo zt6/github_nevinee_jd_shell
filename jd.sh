@@ -145,9 +145,9 @@ function Run_HangUp {
   for js in ${HangUpJs}; do
     Import_Conf ${js} && Set_Env
     if type pm2 >/dev/null 2>&1; then
-      pm2 flush
+      pm2 flush "${js}"
       pm2 stop ${js}.js 2>/dev/null
-      pm2 start -a ${js}.js
+      pm2 start -a ${js}.js --watch --name="${js}"
     else
       Run_Nohup >/dev/null 2>&1
     fi
