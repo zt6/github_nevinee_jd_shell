@@ -147,7 +147,7 @@ function Run_HangUp {
     if type pm2 >/dev/null 2>&1; then
       pm2 flush
       pm2 stop ${js}.js 2>/dev/null
-      pm2 start ${js}.js
+      pm2 start -a ${js}.js
     else
       Run_Nohup >/dev/null 2>&1
     fi
