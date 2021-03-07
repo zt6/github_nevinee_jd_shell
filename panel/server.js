@@ -489,7 +489,7 @@ app.post('/runCmd', function(request, response) {
                     response.send({ err: 1, msg: '执行出错！' });
 
                 } else if (stdout) {
-                    console.log(`stdout: ${stdout}`)
+                    // console.log(`stdout: ${stdout}`)
                     response.send({ err: 0, msg: `${stdout}` });
 
                 } else if (stderr) {
