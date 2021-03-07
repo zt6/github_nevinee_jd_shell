@@ -289,6 +289,7 @@ function getLastModifyFilePath(dir) {
 var app = express();
 app.use(session({
     secret: 'secret',
+    name: `connect.${Math.random()}`,
     resave: true,
     saveUninitialized: true
 }));
