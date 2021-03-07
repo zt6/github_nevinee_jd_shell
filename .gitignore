@@ -5,3 +5,6 @@ panel/package-lock.json
 panel/node_modules*
 docker/src.tgz
 docker-compose.yml
+new_task
+drop_task
+send_count
