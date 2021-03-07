@@ -2,11 +2,11 @@ version: "2.0"
 services:
   # 第1个容器
   jd1:
-    image: evinedeng/jd  # 如果要从gitee更新脚本，则为：evinedeng/jd:gitee
+    image: nevinee/jd:gitee
     container_name: jd1
     restart: always
     tty: true
-    network_mode: "bridge"
+    network_mode: bridge
     hostname: jd1
     volumes:
       - ./jd1/config:/jd/config
@@ -20,11 +20,11 @@ services:
 
   # 第2个容器
   jd2:
-    image: evinedeng/jd # 如果要从gitee更新脚本，则为：evinedeng/jd:gitee
+    image: nevinee/jd:gitee
     container_name: jd2
     restart: always
     tty: true
-    network_mode: "bridge"
+    network_mode: bridge
     hostname: jd2
     volumes:
       - ./jd2/config:/jd/config
@@ -37,11 +37,11 @@ services:
 
   # 第3个容器，以此类推
   jd3:
-    image: evinedeng/jd # 如果要从gitee更新脚本，则为：evinedeng/jd:gitee
+    image: nevinee/jd:gitee
     container_name: jd3
     restart: always
     tty: true
-    network_mode: "bridge"
+    network_mode: bridge
     hostname: jd3
     volumes:
       - ./jd3/config:/jd/config
