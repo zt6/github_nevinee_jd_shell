@@ -137,7 +137,7 @@
                 }
                 editor.setValue('');
 
-                const cmd = this.id === 'git_pull' ? 'bash git_pull' : this.id === 'export_sharecodes' ? 'bash export_sharecodes' : `bash jd ${this.id}`;
+                const cmd = ['git_pull', 'export_sharecodes'].includes(this.id) ? `bash ${this.id}` : `bash jd ${this.id}`;
                 $.post('./runCmd', {cmd: cmd}, function (data) {
                     editor.setValue(data.msg);
 
