@@ -18,7 +18,7 @@
 4 0,9 * * * bash jd jd_bean_sign
 0,30 0 * * * bash jd jd_blueCoin
 12 8,12,18 * * * bash jd jd_bookshop
-37 7 * * * bash jd jd_car
+41 7 * * * bash jd jd_car
 13 8,22 * * * bash jd jd_cash
 0 0 * * * bash jd jd_car_exchange
 2 0 * * * bash jd jd_club_lottery
@@ -26,14 +26,14 @@
 54 2-23/3 * * * bash jd jd_daily_egg
 20 * * * * bash jd jd_dreamFactory
 29 7,12,18 * * * bash jd jd_fruit
-49 6 * * * bash jd jd_get_share_code
+49 6 * * 6 bash jd jd_get_share_code
 36 * * * * bash jd jd_jdfactory
 14 11 * * * bash jd jd_jdzz
 6 0,8,9,13,18,22 * * * bash jd jd_joy
 */20 0-22 * * * bash jd jd_joy_feedPets
-0 0,8,12,16 * * * bash jd jd_joy_reward
-18 11,14 * * * bash jd jd_joy_run
-0 0,6 * * * bash jd jd_joy_steal
+0 */8 * * * bash jd jd_joy_reward
+18 10-20/2 * * * bash jd jd_joy_run
+13 0-21/3 * * * bash jd jd_joy_steal
 0 9,12,18 * * * bash jd jd_jxnc
 32 7 * * * bash jd jd_kd
 13-33/5 13 * * * bash jd jd_live
