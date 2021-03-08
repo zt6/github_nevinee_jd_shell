@@ -325,7 +325,7 @@ Git_PullShell
 if [[ ${ExitStatusScripts} -eq 0 ]]
 then
   echo -e "更新scripts成功...\n"
-  Change_ALL
+  # Change_ALL
   [ -d ${ScriptsDir}/node_modules ] && Notify_Version
   Diff_Cron
   Npm_Install
@@ -335,7 +335,7 @@ then
   Add_Cron
 else
   echo -e "更新scripts失败，请检查原因...\n"
-  Change_ALL
+  # Change_ALL
 fi
 
 ## 调用用户自定义的diy.sh
