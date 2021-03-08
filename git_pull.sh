@@ -333,6 +333,7 @@ echo -e "--------------------------------------------------------------\n"
 Git_PullShell
 Update_Entrypoint
 [[ ${ExitStatusShell} -eq 0 ]] && echo -e "更新shell成功...\n" || echo -e "更新shell失败，请检查原因...\n"
+cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
 
 ## 克隆或更新js脚本
