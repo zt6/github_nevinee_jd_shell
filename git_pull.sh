@@ -42,7 +42,7 @@ function Update_Cron {
     for ((i=1; i<${#RanHourArray[*]}; i++)); do
       RanHour="${RanHour},${RanHourArray[i]}"
     done
-    perl -i -pe "s|.+(bash git_pull.+)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
+    perl -i -pe "s|.+(bash.+git_pull.+log.*)|${RanMin} ${RanHour} \* \* \* sleep ${RanSleep} && \1|" ${ListCron}
     crontab ${ListCron}
   fi
 }
@@ -77,7 +77,7 @@ function Git_PullScripts {
 
 ## 更新docker-entrypoint
 function Update_Entrypoint {
-  if [[ $(cat ${ShellDir}/docker/docker-entrypoint.sh) != $(cat /usr/local/bin/docker-entrypoint.sh) ]]; then
+  if [[ ${JD_DIR} ]] && [[ $(cat ${ShellDir}/docker/docker-entrypoint.sh) != $(cat /usr/local/bin/docker-entrypoint.sh) ]]; then
     cp -f ${ShellDir}/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
     chmod 777 /usr/local/bin/docker-entrypoint.sh
   fi
