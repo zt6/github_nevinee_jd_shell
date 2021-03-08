@@ -7,8 +7,8 @@ LogDir=${ShellDir}/log
 Tips="从日志中未找到任何互助码..."
 
 ## 所有有互助码的活动，只需要把脚本名称去掉前缀jd_后列在Name1中，将其中文名称列在Name2中即可。Name1和Name2中两个名称必须一一对应。
-Name1=(fruit pet plantBean dreamFactory jdfactory crazy_joy jdzz jxnc cfd bookshop cash sgmh)
-Name2=(东东农场 东东萌宠 京东种豆得豆 京喜工厂 东东工厂 crazyJoy任务 京东赚赚 京喜农场 京喜财富岛 口袋书店 签到领现金 闪购盲盒)
+Name1=(fruit pet plantBean dreamFactory jdfactory crazy_joy jdzz jxnc cfd bookshop cash sgmh global)
+Name2=(东东农场 东东萌宠 京东种豆得豆 京喜工厂 东东工厂 crazyJoy任务 京东赚赚 京喜农场 京喜财富岛 口袋书店 签到领现金 闪购盲盒 环球挑战赛)
 
 ## 导出互助码的通用程序
 function Cat_Scodes {
@@ -17,7 +17,7 @@ function Cat_Scodes {
     for log in $(ls -r); do
       case $# in
         1)
-          codes=$(cat ${log} | grep -${Opt} "开始【京东账号|您的(好友)?助力码为" | uniq | perl -0777 -pe "{s|\*||g; s|开始||g; s|\n您的(好友)?助力码为(：)?:?|：|g; s|，.+||g}" | perl -ne '{print if /：/}')
+          codes=$(cat ${log} | grep -${Opt} "开始【京东账号|您的(好友)?助力码为" | uniq | perl -0777 -pe "{s|\*||g; s|开始||g; s|\n您的(好友)?助力码为(：)?(:| )?|：|g; s|，.+||g}" | perl -ne '{print if /：/}')
           ;;
         2)
           codes=$(grep -${Opt} $2 ${log} | perl -pe "{s| ||g; s|$2||g}")
