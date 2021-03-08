@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM node:lts-alpine
 ARG REPO=gitee
 ARG REPO_URL=$REPO.com
 ARG JD_SHELL=jd_shell
@@ -22,9 +22,7 @@ WORKDIR $JD_DIR
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk update -f \
     && apk upgrade \
-    && apk --no-cache add -f nodejs-lts \
-                             npm \
-                             bash \
+    && apk --no-cache add -f bash \
                              coreutils \
                              git \
                              wget \
