@@ -146,8 +146,8 @@ function Run_HangUp {
     Import_Conf ${js} && Set_Env
     if type pm2 >/dev/null 2>&1; then
       pm2 stop ${js}.js 2>/dev/null
-      pm2 start -a ${js}.js --watch --ignore-watch="node_modules" --name="${js}"
       pm2 flush
+      pm2 start -a ${js}.js --watch --ignore-watch="node_modules" --name="${js}"
     else
       Run_Nohup >/dev/null 2>&1
     fi
