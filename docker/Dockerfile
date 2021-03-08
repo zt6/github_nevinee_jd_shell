@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.12
 ARG REPO=gitee
 ARG REPO_URL=$REPO.com
 ARG JD_SHELL=jd_shell
