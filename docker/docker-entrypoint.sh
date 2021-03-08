@@ -40,7 +40,6 @@ if [ ! -s ${JD_DIR}/config/auth.json ]; then
 fi
 
 echo -e "========================3. 启动挂机程序========================\n"
-pm2 flush
 if [[ ${ENABLE_HANGUP} == true ]]; then
   . ${JD_DIR}/config/config.sh
   if [ -n "${Cookie1}" ]; then
@@ -57,6 +56,7 @@ echo -e "========================4. 启动控制面板========================\n
 if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   cd ${JD_DIR}/panel
   pm2 start ./server.js --watch --ignore-watch="public node_modules" --name="server"
+  pm2 flush server
   echo -e "控制面板启动成功...\n"
   echo -e "如未修改用户名密码，则初始用户名为：admin，初始密码为：adminadmin\n"
   echo -e "请访问 http://<ip>:5678 登陆并修改配置...\n"
