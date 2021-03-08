@@ -40,7 +40,6 @@ if [ ! -s ${JD_DIR}/config/auth.json ]; then
 fi
 
 echo -e "========================3. 启动挂机程序========================\n"
-pm2 flush
 if [[ ${ENABLE_HANGUP} == true ]]; then
   . ${JD_DIR}/config/config.sh
   if [ -n "${Cookie1}" ]; then
@@ -63,6 +62,8 @@ if [[ ${ENABLE_WEB_PANEL} == true ]]; then
 elif [[ ${ENABLE_WEB_PANEL} == false ]]; then
   echo -e "已设置为不自动启动控制面板，跳过...\n"
 fi
+
+pm2 flush
 echo -e "容器启动成功...\n"
 
 if [ "${1#-}" != "${1}" ] || [ -z "$(command -v "${1}")" ]; then
