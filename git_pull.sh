@@ -75,6 +75,14 @@ function Git_PullScripts {
   echo
 }
 
+## 更新docker-entrypoint
+function Update_Entrypoint {
+  if [[ $(cat ${ShellDir}/docker/docker-entrypoint.sh) != $(cat /usr/local/bin/docker-entrypoint.sh) ]]; then
+    cp -f ${ShellDir}/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+    chmod 777 /usr/local/bin/docker-entrypoint.sh
+  fi
+}
+
 ## 用户数量UserSum
 function Count_UserSum {
   i=1
@@ -321,8 +329,9 @@ fi
 echo -e "\nJS脚本目录：${ScriptsDir}\n"
 echo -e "--------------------------------------------------------------\n"
 
-## 更新shell，更新crontab
+## 更新shell，更新docker-entrypoint, crontab
 Git_PullShell
+Update_Entrypoint
 [[ ${ExitStatusShell} -eq 0 ]] && echo -e "更新shell成功...\n" || echo -e "更新shell失败，请检查原因...\n"
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
 

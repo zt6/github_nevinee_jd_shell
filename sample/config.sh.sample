@@ -1,6 +1,6 @@
-## Version: v3.27.0
+## Version: v3.28.0
 ## Date: 2021-03-08
-## Update Content: 增加CFD_NOTIFY_CONTROL和JD_JXD_EXCHANGE
+## Update Content: 增加CFD_NOTIFY_CONTROL，JD_JXD_EXCHANGE，JOY_RUN_HELP_MYSELF以及jd_global助力码。
 
 ## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
 
@@ -378,6 +378,25 @@ ForOtherCfd5=""
 ForOtherCfd6=""
 
 
+################################## 定义jd_global活动互助（选填） ##################################
+## 具体填法及要求详见本文件最下方“互助码填法示例”
+MyGlobal1=""
+MyGlobal2=""
+MyGlobal3=""
+MyGlobal4=""
+MyGlobal5=""
+MyGlobal6=""
+MyGlobalA=""
+MyGlobalB=""
+
+ForOtherGlobal1=""
+ForOtherGlobal2=""
+ForOtherGlobal3=""
+ForOtherGlobal4=""
+ForOtherGlobal5=""
+ForOtherGlobal6=""
+
+
 ################################## 定义jd_superMarket蓝币兑换数量（选填） ##################################
 ## jd_superMarket蓝币兑换，可用值包括：
 ## 一、0：表示不兑换京豆，这也是js脚本的默认值
@@ -391,17 +410,6 @@ export MARKET_COIN_TO_BEANS="0"
 ################################## 定义jd_superMarket蓝币成功兑换奖品是否静默运行（选填） ##################################
 ## 默认 "false" 关闭（即:奖品兑换成功后会发出通知提示），如需要静默运行不发出通知，请改为 "true"
 export MARKET_REWARD_NOTIFY=""
-
-
-################################## 定义jd_superMarket是否自动升级商品和货架（选填） ##################################
-## 升级顺序：解锁升级商品、升级货架，默认 "true" 自动升级，如需关闭自动升级，请改为 "false"
-export SUPERMARKET_UPGRADE=""
-
-
-################################## 定义jd_superMarket是否自动更换商圈（选填） ##################################
-## 小于对方300热力值自动更换商圈队伍，默认 "true" 自动更换，如不想更换商圈，请改为 "false"
-## 目前已无此功能，申明了也无效
-# export BUSINESS_CIRCLE_JUMP=""
 
 
 ################################## 定义jd_superMarket是否自动使用金币去抽奖（选填） ##################################
@@ -461,6 +469,11 @@ export JOY_RUN_FLAG=""
 ## 各个账号间请使用 & 分隔，比如：JOY_TEAM_LEVEL="2&2&50&10"
 ## 如果你有5个账号但只写了四个数字，那么第5个账号将默认参加2人赛，账号如果更多，与此类似
 export JOY_TEAM_LEVEL=""
+
+
+################################## 定义jd_joy赛跑自己账号内部是否开启互助（选填） ##################################
+## 输入 true 为开启内部互助
+export JOY_RUN_HELP_MYSELF=""
 
 
 ################################## 定义jd_joy赛跑获胜后是否推送通知（选填） ##################################
