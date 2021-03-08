@@ -56,13 +56,14 @@ echo -e "========================4. 启动控制面板========================\n
 if [[ ${ENABLE_WEB_PANEL} == true ]]; then
   cd ${JD_DIR}/panel
   pm2 start ./server.js --watch --ignore-watch="public node_modules" --name="server"
-  pm2 flush server
   echo -e "控制面板启动成功...\n"
   echo -e "如未修改用户名密码，则初始用户名为：admin，初始密码为：adminadmin\n"
   echo -e "请访问 http://<ip>:5678 登陆并修改配置...\n"
 elif [[ ${ENABLE_WEB_PANEL} == false ]]; then
   echo -e "已设置为不自动启动控制面板，跳过...\n"
 fi
+
+pm2 flush
 echo -e "容器启动成功...\n"
 
 if [ "${1#-}" != "${1}" ] || [ -z "$(command -v "${1}")" ]; then
