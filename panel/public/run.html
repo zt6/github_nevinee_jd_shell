@@ -106,19 +106,23 @@
             });
 
             $('#hangup, #resetpwd, #export_sharecodes, #git_pull').click(function() {
-                let confirmTxt;
+                let confirmTxt, cmd;
                 switch (this.id) {
                     case 'git_pull':
                         confirmTxt = '确认更新脚本文件？';
+                        cmd = 'bash git_pull 2>&1 | tee -a ${JD_DIR}/log/git_pull.log';
                         break;
                     case 'export_sharecodes':
                         confirmTxt = '确认导出所有互助码？';
+                        cmd = `bash ${this.id}`;
                         break;
                     case 'hangup':
                         confirmTxt = '确认重启挂机程序？';
+                        cmd = `bash jd ${this.id}`;
                         break;
                     case 'resetpwd':
                         confirmTxt = '重置用户名密码？';
+                        cmd = `bash jd ${this.id}`;
                         break;
                     default:
                         break;
@@ -137,8 +141,7 @@
                 }
                 editor.setValue('');
 
-                const cmd = ['git_pull', 'export_sharecodes'].includes(this.id) ? `bash ${this.id}` : `bash jd ${this.id}`;
-                $.post('./runCmd', {cmd: cmd}, function (data) {
+                $.post('./runCmd', { cmd }, function (data) {
                     editor.setValue(data.msg);
 
                     clearInterval(timer);
