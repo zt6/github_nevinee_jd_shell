@@ -352,6 +352,7 @@ if [[ ${ExitStatusShell} -eq 0 ]]; then
   echo -e "更新shell成功...\n"
   Update_Entrypoint
   cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
+  [ -d ${ScriptsDir}/node_modules ] && Notify_Version
 else
   echo -e "更新shell失败，请检查原因...\n"
 fi
@@ -365,7 +366,6 @@ if [[ ${ExitStatusScripts} -eq 0 ]]
 then
   echo -e "更新scripts成功...\n"
   Change_ALL
-  [ -d ${ScriptsDir}/node_modules ] && Notify_Version
   Diff_Cron
   Npm_Install
   Output_ListJsAdd
