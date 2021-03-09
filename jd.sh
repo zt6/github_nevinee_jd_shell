@@ -45,15 +45,36 @@ function Count_UserSum {
 ## 组合Cookie和互助码子程序
 function Combin_Sub {
   CombinAll=""
-  for ((i=1; i<=${UserSum}; i++)); do
-    for num in ${TempBlockCookie}; do
-      [[ $i -eq $num ]] && continue 2
+  if [[ ${AutoHelpOther} == true ]] && [[ $1 == ForOther* ]]; then
+
+    ForOtherAll=""
+    MyName=$(echo $1 | perl -pe "s|ForOther|My|")
+
+    for ((m=1; m<=${UserSum}; m++)); do
+      TmpA=${MyName}$m
+      TmpB=${!TmpA}
+      ForOtherAll="${ForOtherAll}@${TmpB}"
     done
-    Tmp1=$1$i
-    Tmp2=${!Tmp1}
-    CombinAll="${CombinAll}&${Tmp2}"
-  done
-  echo ${CombinAll} | perl -pe "{s|^&||; s|^@+||; s|&@|&|g; s|@+|@|g}"
+    
+    for ((n=1; n<=${UserSum}; n++)); do
+      for num in ${TempBlockCookie}; do
+        [[ $n -eq $num ]] && continue 2
+      done
+      CombinAll="${CombinAll}&${ForOtherAll}"
+    done
+
+  else
+    for ((i=1; i<=${UserSum}; i++)); do
+      for num in ${TempBlockCookie}; do
+        [[ $i -eq $num ]] && continue 2
+      done
+      Tmp1=$1$i
+      Tmp2=${!Tmp1}
+      CombinAll="${CombinAll}&${Tmp2}"
+    done
+  fi
+
+  echo ${CombinAll} | perl -pe "{s|^&||; s|^@+||; s|&@|&|g; s|@+&|&|g; s|@+|@|g; s|@+$||}"
 }
 
 ## 组合Cookie、Token与互助码
