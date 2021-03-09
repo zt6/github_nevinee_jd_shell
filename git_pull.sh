@@ -47,6 +47,22 @@ function Update_Cron {
   fi
 }
 
+## 重置仓库remote url
+function Reset_RepoUrl {
+  if [[ ${JD_DIR} ]] && [[ ${ENABLE_RESET_REPO_URL} == true ]]; then
+    if [ -d ${ShellDir}/.git ]; then
+      cd ${ShellDir}
+      git remote set-url origin ${ShellURL}
+      git reset --hard
+    fi
+    if [ -d ${ScriptsDir}/.git ]; then
+      cd ${ScriptsDir}
+      git remote set-url origin ${ScriptsURL}
+      git reset --hard
+    fi
+  fi
+}
+
 ## 更新shell
 function Git_PullShell {
   echo -e "更新shell...\n"
@@ -329,12 +345,16 @@ fi
 echo -e "\nJS脚本目录：${ScriptsDir}\n"
 echo -e "--------------------------------------------------------------\n"
 
-## 更新shell，更新docker-entrypoint, crontab
-Git_PullShell
-Update_Entrypoint
-[[ ${ExitStatusShell} -eq 0 ]] && echo -e "更新shell成功...\n" || echo -e "更新shell失败，请检查原因...\n"
-cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
+## 更新shell，并处理相关文件
 [[ $(date "+%-H") -le 2 ]] && Update_Cron
+Reset_RepoUrl && Git_PullShell
+if [[ ${ExitStatusShell} -eq 0 ]]; then
+  echo -e "更新shell成功...\n"
+  Update_Entrypoint
+  cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
+else
+  echo -e "更新shell失败，请检查原因...\n"
+fi
 
 ## 克隆或更新js脚本
 [ -f ${ScriptsDir}/package.json ] && PackageListOld=$(cat ${ScriptsDir}/package.json)
