@@ -36,7 +36,7 @@ function Import_Conf {
 ## 更新crontab，gitee服务器同一时间限制5个链接，因此每个人更新代码必须错开时间，每次执行git_pull随机生成。
 ## 每天次数随机，更新时间随机，更新秒数随机，至少6次，至多12次，大部分为8-10次，符合正态分布。
 function Update_Cron {
-  if [ -f ${ListCron} ]; then
+  if [[ $(date "+%-H") -le 2 ]] && [ -f ${ListCron} ]; then
     RanMin=$((${RANDOM} % 60))
     RanSleep=$((${RANDOM} % 56))
     RanHourArray[0]=$((${RANDOM} % 3))
@@ -325,10 +325,11 @@ fi
 echo -e "\nJS脚本目录：${ScriptsDir}\n"
 echo -e "--------------------------------------------------------------\n"
 
-## 导入配置，更新cron，更新shell，并处理相关文件
+## 导入配置，更新cron，设置url，更新shell，复制sample，复制entrypoint，发送新配置通知
 Import_Conf
-[[ $(date "+%-H") -le 2 ]] && Update_Cron
-Reset_RepoUrl && Git_PullShell
+Update_Cron
+Reset_RepoUrl
+Git_PullShell
 if [[ ${ExitStatusShell} -eq 0 ]]; then
   echo -e "更新shell成功...\n"
   Update_Entrypoint
