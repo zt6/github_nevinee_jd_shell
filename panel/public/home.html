@@ -83,11 +83,11 @@
             });
 
             // 勾选记忆
-            if (localStorage.getItem('autoReplaceCookie') === 'false') {
+            if (sessionStorage.getItem('autoReplaceCookie') === 'false') {
                 $('#autoReplace').prop('checked', false);
             }
             $('#autoReplace').on('change', function() {
-                localStorage.setItem('autoReplaceCookie', $(this).prop('checked'));
+                sessionStorage.setItem('autoReplaceCookie', $(this).prop('checked'));
             });
 
             qrcode = new QRCode(document.getElementById("qrcode"),
