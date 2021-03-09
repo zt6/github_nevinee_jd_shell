@@ -80,6 +80,18 @@ function Git_PullShell {
   echo
 }
 
+## 更新shell成功后的操作
+function Git_PullShellNext {
+  if [[ ${ExitStatusShell} -eq 0 ]]; then
+    echo -e "更新shell成功...\n"
+    Update_Entrypoint
+    cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
+    [ -d ${ScriptsDir}/node_modules ] && Notify_Version
+  else
+    echo -e "更新shell失败，请检查原因...\n"
+  fi
+}
+
 ## 克隆scripts
 function Git_CloneScripts {
   echo -e "克隆scripts...\n"
@@ -330,14 +342,7 @@ Import_Conf
 Update_Cron
 Reset_RepoUrl
 Git_PullShell
-if [[ ${ExitStatusShell} -eq 0 ]]; then
-  echo -e "更新shell成功...\n"
-  Update_Entrypoint
-  cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
-  [ -d ${ScriptsDir}/node_modules ] && Notify_Version
-else
-  echo -e "更新shell失败，请检查原因...\n"
-fi
+Git_PullShellNext
 
 ## 克隆或更新js脚本
 [ -f ${ScriptsDir}/package.json ] && PackageListOld=$(cat ${ScriptsDir}/package.json)
