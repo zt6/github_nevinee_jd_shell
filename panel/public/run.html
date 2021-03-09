@@ -78,7 +78,7 @@
                 switch (this.id) {
                     case 'rm_log':
                         confirmTxt = '确认删除旧日志？';
-                        cmd = 'bash rm_log | tee ${JD_DIR}/log/rm_log.log';
+                        cmd = 'bash rm_log 2>&1 | tee ${JD_DIR}/log/rm_log.log';
                         break;
                     case 'jd_list':
                         // confirmTxt = '';
