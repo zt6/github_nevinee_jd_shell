@@ -48,11 +48,10 @@ function Rm_EmptyDir {
 }
 
 ## 运行
-echo -e "查找旧日志文件中...\n"
 if [ -n "${RmLogDaysAgo}" ]; then
+  echo -e "查找旧日志文件中...\n"
   Rm_JsLog
   Rm_GitPullLog
   Rm_EmptyDir
+  echo -e "删除旧日志执行完毕\n"
 fi
-
-echo -e "删除旧日志执行完毕\n"
