@@ -108,7 +108,6 @@
 
                 const jsName = this.id === 'jd_list' ? '' : this.id;
                 $.post('./runCmd', { cmd }, function (data) {
-                    debugger;
                     editor.setValue(data.msg);
 
                     if (jsName) {
