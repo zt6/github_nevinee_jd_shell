@@ -487,15 +487,24 @@ app.post('/runCmd', function(request, response) {
                 if (error) {
                     console.error(`执行的错误: ${error}`);
                     response.send({ err: 1, msg: '执行出错！' });
+                    return;
 
-                } else if (stdout) {
+                }
+
+                if (stdout) {
                     // console.log(`stdout: ${stdout}`)
                     response.send({ err: 0, msg: `${stdout}` });
+                    return;
 
-                } else if (stderr) {
+                }
+
+                if (stderr) {
                     console.error(`stderr: ${stderr}`);
                     response.send({ err: 1, msg: `${stderr}` });
+                    return;
                 }
+
+                response.send({ err: 0, msg: '执行结束，无结果返回。' });
             }, delay);
         });
     } else {
@@ -508,9 +517,14 @@ app.post('/runCmd', function(request, response) {
  */
 app.get('/runLog/:jsName', function (request, response) {
     if (request.session.loggedin) {
-        let shareCodeFile = getLastModifyFilePath(path.join(rootPath, `log/${request.params.jsName}/`));
+        const jsName = request.params.jsName;
+        let shareCodeFile = getLastModifyFilePath(path.join(rootPath, `log/${jsName}/`));
+        if (jsName === 'rm_log') {
+            shareCodeFile = path.join(rootPath, `log/${jsName}.log`)
+        }
+
         if (shareCodeFile) {
-            content = getFileContentByName(shareCodeFile);
+            const content = getFileContentByName(shareCodeFile);
             response.setHeader("Content-Type", "text/plain");
             response.send(content);
         } else {

@@ -23,7 +23,6 @@
                     <li><a href="./home">首页</a></li>
                     <li><a href="./crontab">定时设定</a></li>
                     <li><a href="./diff">对比工具</a></li>
-                    <li><a href="./shareCode">Share Code</a></li>
                     <li><a href="./diy">自定义脚本</a></li>
                     <li class="active"><a href="./run">手动执行</a></li>
                     <li><a href="./log">日志查询</a></li>
@@ -37,12 +36,12 @@
                 <button id="wrap" title="切换换行">切换换行</button>
                 <br/>
                 <button id="jd_list" class="cmd-btn" title="列出脚本">列出脚本</button>
-                <button id="jd_bean_sign" class="cmd-btn" title="京豆签到">京豆签到</button>
-                <button id="jd_fruit" class="cmd-btn" title="东东农场">东东农场</button>
-                <button id="jd_dreamFactory" class="cmd-btn" title="京喜工厂">京喜工厂</button>
-                <button id="jd_joy_reward" class="cmd-btn" title="宠汪汪积分兑换">宠汪汪积分兑换</button>
-                <button id="git_pull" title="更新脚本">更新脚本</button>
-                <button id="export_sharecodes" title="导出所有互助码">导出所有互助码</button>
+                <button id="git_pull" title="更新脚本文件">更新脚本文件</button>
+                <button id="rm_log" class="cmd-btn" title="删除旧日志">删除旧日志</button>
+                <button id="jd_get_share_code" class="cmd-btn" title="获取互助码">获取互助码</button>
+                <button id="export_sharecodes" title="导出互助码">导出互助码</button>
+                <button id="ps" title="查看进程">查看进程</button>
+                <button id="jd-crazy-joy-coin" title="查看挂机日志">查看挂机日志</button>
                 <button id="hangup" title="重启挂机程序">重启挂机程序</button>
                 <button id="resetpwd" title="重置用户名密码">重置用户名密码</button>
                 <br/>
@@ -75,6 +74,28 @@
             });
 
             $('.cmd-btn').click(function() {
+                let confirmTxt, cmd;
+                switch (this.id) {
+                    case 'rm_log':
+                        confirmTxt = '确认删除旧日志？';
+                        cmd = 'bash rm_log 2>&1 | tee ${JD_DIR}/log/rm_log.log';
+                        break;
+                    case 'jd_list':
+                        // confirmTxt = '';
+                        cmd = 'bash jd';
+                        break;
+                    case 'jd_get_share_code':
+                        confirmTxt = '确认获取互助码？';
+                        cmd = `bash jd ${this.id} now`;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (confirmTxt && !confirm(confirmTxt)) {
+                    return;
+                }
+
                 if (timer) {
                     Swal.fire({
                         text: '请等待上一条任务执行完毕。',
@@ -82,11 +103,11 @@
                     });
                     return;
                 }
+
                 editor.setValue('');
 
                 const jsName = this.id === 'jd_list' ? '' : this.id;
-                const cmd = jsName ? `bash jd ${jsName} now`: 'bash jd';
-                $.post('./runCmd', {cmd: cmd}, function (data) {
+                $.post('./runCmd', { cmd }, function (data) {
                     editor.setValue(data.msg);
 
                     if (jsName) {
@@ -105,7 +126,7 @@
                 }, 1000);
             });
 
-            $('#hangup, #resetpwd, #export_sharecodes, #git_pull').click(function() {
+            $('#hangup, #resetpwd, #export_sharecodes, #git_pull, #ps, #jd-crazy-joy-coin').click(function() {
                 let confirmTxt, cmd;
                 switch (this.id) {
                     case 'git_pull':
@@ -113,8 +134,16 @@
                         cmd = 'bash git_pull 2>&1 | tee -a ${JD_DIR}/log/git_pull.log';
                         break;
                     case 'export_sharecodes':
-                        confirmTxt = '确认导出所有互助码？';
+                        confirmTxt = '确认导出互助码？';
                         cmd = `bash ${this.id}`;
+                        break;
+                    case 'ps':
+                        // confirmTxt = '确认查看进程？';
+                        cmd = `${this.id}`;
+                        break;
+                    case 'jd-crazy-joy-coin':
+                        // confirmTxt = '确认查看挂机日志？';
+                        cmd = `cat /root/.pm2/logs/${this.id}-out.log 2>&1`;
                         break;
                     case 'hangup':
                         confirmTxt = '确认重启挂机程序？';
@@ -128,7 +157,7 @@
                         break;
                 }
 
-                if (!confirm(confirmTxt)) {
+                if (confirmTxt && !confirm(confirmTxt)) {
                     return;
                 }
 
