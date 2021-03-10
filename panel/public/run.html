@@ -47,7 +47,7 @@
                 <br/>
                 <form class="run-cmd-form" action="runCmd" method="POST">
                     <div class="cmd-section">
-                        bash jd <input id="jdScript" name="jdScript" type="text" placeholder="请输入脚本名称" required> now
+                        bash jd(.sh) <input id="jdScript" name="jdScript" type="text" placeholder="请输入脚本名称" required> now
                     </div>
                     <input type="submit" id="runCmd">
                 </form>
@@ -78,15 +78,15 @@
                 switch (this.id) {
                     case 'rm_log':
                         confirmTxt = '确认删除旧日志？';
-                        cmd = 'bash rm_log 2>&1 | tee ${JD_DIR}/log/rm_log.log';
+                        cmd = 'bash rm_log.sh 2>&1 | tee log/rm_log.log';
                         break;
                     case 'jd_list':
                         // confirmTxt = '';
-                        cmd = 'bash jd';
+                        cmd = 'bash jd.sh';
                         break;
                     case 'jd_get_share_code':
                         confirmTxt = '确认获取互助码？';
-                        cmd = `bash jd ${this.id} now`;
+                        cmd = `bash jd.sh ${this.id} now`;
                         break;
                     default:
                         break;
@@ -131,11 +131,11 @@
                 switch (this.id) {
                     case 'git_pull':
                         confirmTxt = '确认更新脚本文件？';
-                        cmd = 'bash git_pull 2>&1 | tee -a ${JD_DIR}/log/git_pull.log';
+                        cmd = 'bash git_pull.sh 2>&1 | tee -a log/git_pull.log';
                         break;
                     case 'export_sharecodes':
                         confirmTxt = '确认导出互助码？';
-                        cmd = `bash ${this.id}`;
+                        cmd = `bash ${this.id}.sh`;
                         break;
                     case 'ps':
                         // confirmTxt = '确认查看进程？';
@@ -147,11 +147,11 @@
                         break;
                     case 'hangup':
                         confirmTxt = '确认重启挂机程序？';
-                        cmd = `bash jd ${this.id}`;
+                        cmd = `bash jd.sh ${this.id}`;
                         break;
                     case 'resetpwd':
                         confirmTxt = '重置用户名密码？';
-                        cmd = `bash jd ${this.id}`;
+                        cmd = `bash jd.sh ${this.id}`;
                         break;
                     default:
                         break;
@@ -200,8 +200,8 @@
                 }
                 editor.setValue('');
 
-                const cmd = `bash jd ${jdScript} now`;
-                $.post('./runCmd', {cmd: cmd, delay: 1000}, function (data) {
+                const cmd = `bash jd.sh ${jdScript} now`;
+                $.post('./runCmd', {cmd: cmd, delay: 500}, function (data) {
                     editor.setValue(data.msg);
 
                     //将光标和滚动条设置到文本区最下方
