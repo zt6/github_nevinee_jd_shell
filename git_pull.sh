@@ -85,6 +85,7 @@ function Git_PullShellNext {
   if [[ ${ExitStatusShell} -eq 0 ]]; then
     echo -e "更新shell成功...\n"
     Update_Entrypoint
+    [[ "${PanelDependOld}" != "${PanelDependNew}" ]] && cd ${ShellDir}/panel && Npm_Install panel
     cp -f ${FileConfSample} ${ConfigDir}/config.sh.sample
     [ -d ${ScriptsDir}/node_modules ] && Notify_Version
   else
@@ -213,31 +214,27 @@ function Npm_InstallSub {
 
 ## npm install
 function Npm_Install {
-  cd ${ScriptsDir}
-  if [[ "${PackageListOld}" != "$(cat package.json)" ]]; then
-    echo -e "检测到package.json有变化，运行 npm install...\n"
-    Npm_InstallSub
-    if [ $? -ne 0 ]; then
-      echo -e "\nnpm install 运行不成功，自动删除 ${ScriptsDir}/node_modules 后再次尝试一遍..."
-      rm -rf ${ScriptsDir}/node_modules
-    fi
-    echo
+  echo -e "检测到 $1 的依赖包有变化，运行 npm install...\n"
+  Npm_InstallSub
+  if [ $? -ne 0 ]; then
+    echo -e "\nnpm install 运行不成功，自动删除 $1/node_modules 后再次尝试一遍..."
+    rm -rf node_modules
   fi
+  echo
 
-  if [ ! -d ${ScriptsDir}/node_modules ]; then
+  if [ ! -d node_modules ]; then
     echo -e "运行 npm install...\n"
     Npm_InstallSub
     if [ $? -ne 0 ]; then
-      echo -e "\nnpm install 运行不成功，自动删除 ${ScriptsDir}/node_modules...\n"
-      echo -e "请进入 ${ScriptsDir} 目录后按照wiki教程手动运行 npm install...\n"
-      echo -e "当 npm install 失败时，如果检测到有新任务或失效任务，只会输出日志，不会自动增加或删除定时任务...\n"
+      echo -e "\nnpm install 运行不成功，自动删除 $1/node_modules...\n"
+      echo -e "请进入 $1 目录后手动运行 npm install...\n"
       echo -e "3...\n"
       sleep 1
       echo -e "2...\n"
       sleep 1
       echo -e "1...\n"
       sleep 1
-      rm -rf ${ScriptsDir}/node_modules
+      rm -rf node_modules
     fi
   fi
 }
@@ -341,19 +338,22 @@ echo -e "--------------------------------------------------------------\n"
 Import_Conf
 Update_Cron
 Reset_RepoUrl
+[ -f ${ShellDir}/panel/package.json ] && PanelDependOld=$(cat ${ShellDir}/panel/package.json)
 Git_PullShell
+[ -f ${ShellDir}/panel/package.json ] && PanelDependNew=$(cat ${ShellDir}/panel/package.json)
 Git_PullShellNext
 
 ## 克隆或更新js脚本
-[ -f ${ScriptsDir}/package.json ] && PackageListOld=$(cat ${ScriptsDir}/package.json)
+[ -f ${ScriptsDir}/package.json ] && ScriptsDependOld=$(cat ${ScriptsDir}/package.json)
 [ -d ${ScriptsDir}/.git ] && Git_PullScripts || Git_CloneScripts
+[ -f ${ScriptsDir}/package.json ] && ScriptsDependNew=$(cat ${ScriptsDir}/package.json)
 
 ## 执行各函数
 if [[ ${ExitStatusScripts} -eq 0 ]]
 then
   echo -e "更新scripts成功...\n"
   Diff_Cron
-  Npm_Install
+  [[ "${ScriptsDependOld}" != "${ScriptsDependNew}" ]] && cd ${ScriptsDir} && Npm_Install scripts
   Output_ListJsAdd
   Output_ListJsDrop
   Del_Cron
