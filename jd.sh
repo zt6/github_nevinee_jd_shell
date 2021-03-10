@@ -2,7 +2,8 @@
 
 ## 路径
 ShellDir=${JD_DIR:-$(cd $(dirname $0); pwd)}
-[ ${JD_DIR} ] && HelpJd=jd || HelpJd=jd.sh
+[[ ${JD_DIR} ]] && HelpJd=jd || HelpJd=jd.sh
+[[ ${JD_DIR} ]] && ShellJd=jd || ShellJd=${ShellDir}/jd.sh
 ScriptsDir=${ShellDir}/scripts
 ConfigDir=${ShellDir}/config
 FileConf=${ConfigDir}/config.sh
@@ -10,6 +11,8 @@ FileConfSample=${ShellDir}/sample/config.sh.sample
 LogDir=${ShellDir}/log
 ListScripts=($(cd ${ScriptsDir}; ls *.js | grep -E "j[drx]_"))
 ListCron=${ConfigDir}/crontab.list
+ListCronLxk=${ScriptsDir}/docker/crontab_list.sh
+ListJs=${LogDir}/js.list
 
 ## 导入config.sh
 function Import_Conf {
@@ -138,8 +141,9 @@ function Help {
   echo -e "本脚本的用法为："
   echo -e "1. bash ${HelpJd} xxx      # 如果设置了随机延迟并且当时时间不在0-2、30-31、59分内，将随机延迟一定秒数"
   echo -e "2. bash ${HelpJd} xxx now  # 无论是否设置了随机延迟，均立即运行"
-  echo -e "3. bash ${HelpJd} hangup   # 重启挂机程序"
-  echo -e "4. bash ${HelpJd} resetpwd # 重置控制面板用户名和密码"
+  echo -e "3. bash ${HelpJd} runall   # 运行所有非挂机脚本，非常耗时"
+  echo -e "4. bash ${HelpJd} hangup   # 重启挂机程序"
+  echo -e "5. bash ${HelpJd} resetpwd # 重置控制面板用户名和密码"
   echo -e "\n针对用法1、用法2中的\"xxx\"，可以不输入后缀\".js\"，另外，如果前缀是\"jd_\"的话前缀也可以省略。"
   echo -e "当前有以下脚本可以运行（仅列出以jd_、jr_、jx_开头的脚本）："
   cd ${ScriptsDir}
@@ -182,7 +186,25 @@ function Reset_Pwd {
   echo -e "控制面板重置成功，用户名：admin，密码：adminadmin\n"
 }
 
-## 运行京东脚本
+## 一次性运行所有脚本
+function Run_All {
+  if [ ! -f ${ListJs} ]; then
+    cat ${ListCronLxk} | grep -E "j[drx]_\w+\.js" | perl -pe "s|.+(j[drx]_\w+)\.js.+|\1|" | sort -u > ${ListJs}
+  fi
+  echo -e "\n==================== 开始运行所有非挂机脚本 ====================\n"
+  echo -e "请注意：本过程将非常非常耗时，一个账号可能长达几小时，账号越多耗时越长，如果是手动运行，退出终端也将终止运行。\n"
+  echo -e "倒计时5秒...\n"
+  for ((sec=5; sec>0; sec--)); do
+    echo -e "$sec...\n"
+    sleep 1
+  done
+  for file in $(cat ${ListJs}); do
+    echo -e "==================== 运行 $file.js 脚本 ====================\n"
+    bash ${ShellJd} $file now
+  done
+}
+
+## 正常运行单个脚本
 function Run_Normal {
   Import_Conf $1 && Detect_Cron && Set_Env
   
@@ -226,21 +248,31 @@ case $# in
     Help
     ;;
   1)
-    if [[ $1 == hangup ]]; then
-      Run_HangUp
-    elif [[ $1 == resetpwd ]]; then
-      Reset_Pwd
-    else
-      Run_Normal $1
-    fi
+    case $1 in
+      hangup)
+        Run_HangUp
+        ;;
+      resetpwd)
+        Reset_Pwd
+        ;;
+      runall)
+        Run_All
+        ;;
+      *)
+        Run_Normal $1
+        ;;
+    esac
     ;;
   2)
-    if [[ $2 == now ]]; then
-      Run_Normal $1 $2
-    else
-      echo -e "\n命令输入错误...\n"
-      Help
-    fi
+    case $2 in
+      now)
+        Run_Normal $1 $2
+        ;;
+      *)
+        echo -e "\n命令输入错误...\n"
+        Help
+        ;;
+    esac
     ;;
   *)
     echo -e "\n命令过多...\n"
