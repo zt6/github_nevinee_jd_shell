@@ -183,8 +183,7 @@ function Notify_Version {
   if [ -f ${FileConf} ] && [[ "${VerConf}" != "${VerConfSample}" ]] && [[ ${UpdateDate} == $(date "+%Y-%m-%d") ]]
   then
     if [ ! -f ${SendCount} ]; then
-      echo -e "检测到配置文件config.sh.sample有更新\n\n更新日期: ${UpdateDate}\n当前版本: ${VerConf}\n新的版本: ${VerConfSample}\n更新内容: ${UpdateContent}\n如需使用新功能请对照config.sh.sample，将相关新参数手动增加到你自己的config.sh中，否则请无视本消息。\n" | tee ${ContentVersion}
-      echo -e "本消息只在该新版本配置文件更新当天发送一次。" >> ${ContentVersion}
+      echo -e "检测到配置文件config.sh.sample有更新\n\n更新日期: ${UpdateDate}\n当前版本: ${VerConf}\n新的版本: ${VerConfSample}\n更新内容: ${UpdateContent}\n更新说明: 如需使用新功能请对照config.sh.sample，将相关新参数手动增加到你自己的config.sh中，否则请无视本消息。本消息只在该新版本配置文件更新当天发送一次。" | tee ${ContentVersion}
       cd ${ShellDir}
       node update.js
       if [ $? -eq 0 ]; then
