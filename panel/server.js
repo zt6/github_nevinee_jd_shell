@@ -493,8 +493,10 @@ app.post('/runCmd', function(request, response) {
     if (request.session.loggedin) {
         const cmd = request.body.cmd;
         const delay = request.body.delay || 0;
+        // console.log('before exec');
         // exec maxBuffer 20MB
         exec(cmd, { maxBuffer: 1024 * 1024 * 20 }, (error, stdout, stderr) => {
+            // console.log(error, stdout, stderr);
             // 根据传入延时返回数据，有时太快会出问题
             setTimeout(() => {
                 if (error) {
