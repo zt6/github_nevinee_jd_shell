@@ -497,9 +497,9 @@ export MONEY_TREE_SELL_FRUIT=""
 ## 每次执行脚本通知太频繁了，改成只在周三和周六中午那一次运行时发送通知提醒
 ## 除掉上述提及时间之外，均设置为 true，静默不发通知
 ## 特别说明：针对北京时间有效。
-if [ $(date "+%w") -eq 6 ] && [ $(date "+%H") -ge 9 ] && [ $(date "+%H") -lt 14 ]; then
+if [ $(date "+%-w") -eq 6 ] && [ $(date "+%-H") -ge 9 ] && [ $(date "+%-H") -lt 14 ]; then
   export PET_NOTIFY_CONTROL="false"
-elif [ $(date "+%w") -eq 3 ] && [ $(date "+%H") -ge 9 ] && [ $(date "+%H") -lt 14 ]; then
+elif [ $(date "+%-w") -eq 3 ] && [ $(date "+%-H") -ge 9 ] && [ $(date "+%-H") -lt 14 ]; then
   export PET_NOTIFY_CONTROL="false"
 else
   export PET_NOTIFY_CONTROL="true"
