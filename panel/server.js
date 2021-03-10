@@ -491,7 +491,7 @@ app.get('/run', function (request, response) {
 
 app.post('/runCmd', function(request, response) {
     if (request.session.loggedin) {
-        const cmd = request.body.cmd;
+        const cmd = `cd ${rootPath};` + request.body.cmd;
         const delay = request.body.delay || 0;
         // console.log('before exec');
         // exec maxBuffer 20MB
