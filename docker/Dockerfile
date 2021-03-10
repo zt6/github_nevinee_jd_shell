@@ -40,7 +40,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && echo -e $JD_SCRIPTS_KEY > /root/.ssh/$JD_SCRIPTS \
     && chmod 600 /root/.ssh/$JD_SHELL /root/.ssh/$JD_SCRIPTS \
     && echo -e "Host $JD_SHELL_HOST\n\tHostname $REPO_URL\n\tIdentityFile=/root/.ssh/$JD_SHELL\n\nHost $JD_SCRIPTS_HOST\n\tHostname $REPO_URL\n\tIdentityFile=/root/.ssh/$JD_SCRIPTS" > /root/.ssh/config \
-    && echo -e "\n\nHost $REPO_URL\n  StrictHostKeyChecking no\n" >> /etc/ssh/ssh_config \
+    && echo -e "\n\nHost *\n  StrictHostKeyChecking no\n" >> /etc/ssh/ssh_config \
     && chmod 644 /root/.ssh/config \
     && ssh-keyscan $REPO_URL > /root/.ssh/known_hosts \
     && git clone -b $JD_SHELL_BRANCH $JD_SHELL_URL $JD_DIR \
