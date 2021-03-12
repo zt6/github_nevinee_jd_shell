@@ -334,7 +334,7 @@ echo -e "\nJS脚本目录：${ScriptsDir}\n"
 echo -e "--------------------------------------------------------------\n"
 
 ## 导入配置，更新cron，设置url，更新shell，复制sample，复制entrypoint，发送新配置通知
-Import_Conf
+Import_Conf "git_pull"
 Update_Cron
 Reset_RepoUrl
 [ -f ${ShellDir}/panel/package.json ] && PanelDependOld=$(cat ${ShellDir}/panel/package.json)
